@@ -8,4 +8,14 @@ const UserSchema = new Schema({
     status: { type: String, enum:['admin', 'colab'], default: 'colab', required: true }
 });
 
-module.exports = mongoose.model('User', UserSchema);
+const TodoSchema = new Schema({
+    title: { type: String, required: true },
+    isDone: { type: Boolean, default: false, required: true },
+    date: Date,
+    user: UserSchema
+});
+
+module.exports = { 
+    user: mongoose.model('User', UserSchema), 
+    todo: mongoose.model('Todo', TodoSchema)
+};

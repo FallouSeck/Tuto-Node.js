@@ -1,11 +1,23 @@
-const Todo = require('../models/Todo');
+const Todo = require('../models').todo;
 
 const createTodo = (req, res) => {
-    const newTodo = new Todo({
-        title: req.body.title,
-        isDone: req.body.isDone,
-        date: Date.now()
-    });
+    let newTodo;
+    
+    if (req.body.user === undefined) {
+        newTodo = new Todo({
+            title: req.body.title,
+            isDone: req.body.isDone,
+            date: Date.now()
+        });
+    } else {
+        newTodo = new Todo({
+            title: req.body.title,
+            isDone: req.body.isDone,
+            date: Date.now(),
+            user: req.body.user
+        });
+    }
+
     return newTodo.save()
     .then((savedTodo) => {
         return res.send(savedTodo);
@@ -44,7 +56,7 @@ const getOneTodo = (req, res) => {
         return res.send( {todo} );
     })
     .catch((error) => {
-        return res.status(404).send("L'identifaint saisi n'est pas valide ou inconnu");
+        return res.status(404).send("L'identifaint saisi n'est pas valide ou inconnu" + error);
     })
 }
 
